@@ -19,33 +19,26 @@ const GameForm = ({ initialGame, user }) => {
   const [currentGame, setCurrentGame] = useState(initialState);
 
   useEffect(() => {
-    console.warn(initialGame);
-    console.warn(currentGame);
+    // console.warn(initialGame);
+    // console.warn(currentGame);
     // TODO: Get the game types, then set the state
     getGameTypes().then(setGameTypes);
 
     if (initialGame) {
-      setCurrentGame(initialGame);
+      const formattedGame = {
+        ...initialGame,
+        gameTypeId: initialGame.gameType, // Or any necessary conversion
+      };
+      setCurrentGame(formattedGame);
     }
   }, [initialGame]);
 
-  // const handleChange = (e) => {
-  //   // TODO: Complete the onChange function
-  //   const { name, value } = e.target;
-  //   setCurrentGame((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  // };
-
   const handleChange = (e) => {
+    // TODO: Complete the onChange function
     const { name, value } = e.target;
-    const newValue = (name === 'numberOfPlayers' || name === 'skillLevel' || name === 'gameTypeId')
-      ? Number(value)
-      : value;
     setCurrentGame((prevState) => ({
       ...prevState,
-      [name]: newValue,
+      [name]: value,
     }));
   };
 
@@ -68,6 +61,7 @@ const GameForm = ({ initialGame, user }) => {
       createGame(game).then(() => router.push('/games'));
     }
     // Send POST request to your API
+    console.warn(game);
   };
 
   return (
@@ -120,7 +114,7 @@ const GameForm = ({ initialGame, user }) => {
           <Form.Label>Game Type</Form.Label>
           <Form.Select
             name="gameTypeId"
-            value={currentGame.gameType}
+            value={currentGame.gameTypeId}
             required
             onChange={handleChange}
           >
@@ -153,6 +147,7 @@ GameForm.propTypes = {
     numberOfPlayers: PropTypes.number.isRequired,
     skillLevel: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
+    gameType: PropTypes.number.isRequired,
   }).isRequired,
   // onUpdate: PropTypes.func.isRequired,
 };
