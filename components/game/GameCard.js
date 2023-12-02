@@ -9,14 +9,16 @@ const GameCard = ({
   maker,
   numberOfPlayers,
   skillLevel,
+  gameType,
 }) => {
   const router = useRouter();
 
   return (
     <Card className="text-center">
-      <Card.Header>{title}</Card.Header>
+      <Card.Header>By: {maker}</Card.Header>
       <Card.Body>
-        <Card.Title>By: {maker}</Card.Title>
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>Category: {gameType}</Card.Text>
         <Card.Text>{numberOfPlayers} players needed</Card.Text>
         <Button
           onClick={() => {
@@ -33,6 +35,7 @@ const GameCard = ({
 
 GameCard.propTypes = {
   id: PropTypes.number,
+  gameType: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   maker: PropTypes.string.isRequired,
   numberOfPlayers: PropTypes.number.isRequired,

@@ -19,15 +19,15 @@ const GameForm = ({ initialGame, user }) => {
   const [currentGame, setCurrentGame] = useState(initialState);
 
   useEffect(() => {
-    // console.warn(initialGame);
-    // console.warn(currentGame);
+    console.warn(initialGame);
+    console.warn(currentGame);
     // TODO: Get the game types, then set the state
     getGameTypes().then(setGameTypes);
 
     if (initialGame) {
       const formattedGame = {
         ...initialGame,
-        gameTypeId: initialGame.gameType, // Or any necessary conversion
+        gameTypeId: initialGame.gameType,
       };
       setCurrentGame(formattedGame);
     }
@@ -55,12 +55,12 @@ const GameForm = ({ initialGame, user }) => {
       userId: user.uid,
     };
 
+    // Send POST request to your API
     if (initialGame) {
       updateGame(currentGame.id, game).then(() => router.push('/games'));
     } else {
       createGame(game).then(() => router.push('/games'));
     }
-    // Send POST request to your API
     console.warn(game);
   };
 
@@ -114,7 +114,7 @@ const GameForm = ({ initialGame, user }) => {
           <Form.Label>Game Type</Form.Label>
           <Form.Select
             name="gameTypeId"
-            value={currentGame.gameTypeId}
+            value={currentGame.gameTypeId.id}
             required
             onChange={handleChange}
           >

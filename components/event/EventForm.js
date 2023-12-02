@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { createEvent } from '../../utils/data/eventData';
+import { createEvent, updateEvent } from '../../utils/data/eventData';
 import { getGames } from '../../utils/data/gameData';
 
 const initialState = {
@@ -12,7 +12,8 @@ const initialState = {
   time: '00:00:00',
 };
 
-const EventForm = ({ user }) => {
+const EventForm = ({ initialEvent, user }) => {
+  const router = useRouter();
   const [games, setGames] = useState([]);
   /*
   Since the input fields are bound to the values of
@@ -20,12 +21,21 @@ const EventForm = ({ user }) => {
   provide some default values.
   */
   const [currentEvent, setCurrentEvent] = useState(initialState);
-  const router = useRouter();
 
   useEffect(() => {
+    console.warn(initialEvent);
+    console.warn(currentEvent);
     // TODO: Get the game types, then set the state
     getGames().then(setGames);
-  }, []);
+
+    if (initialEvent) {
+      const formattedEvent = {
+        ...initialEvent,
+        gameId: initialEvent.game ? initialEvent.game.id : 0,
+      };
+      setCurrentEvent(formattedEvent);
+    }
+  }, [initialEvent]);
 
   const handleChange = (e) => {
     // TODO: Complete the onChange function
@@ -49,7 +59,13 @@ const EventForm = ({ user }) => {
     };
 
     // Send POST request to your API
-    createEvent(event).then(() => router.push('/events'));
+    if (initialEvent) {
+      updateEvent(currentEvent.id, event).then(() => router.push('/events'));
+    } else {
+      createEvent(event).then(() => router.push('/events'));
+    }
+
+    console.warn(event);
   };
 
   return (
@@ -117,6 +133,14 @@ const EventForm = ({ user }) => {
 EventForm.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
+  }).isRequired,
+  initialEvent: PropTypes.shape({
+    gameId: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    game: PropTypes.object.isRequired,
   }).isRequired,
 };
 
