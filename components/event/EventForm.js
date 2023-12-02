@@ -35,6 +35,7 @@ const EventForm = ({ initialEvent, user }) => {
       };
       setCurrentEvent(formattedEvent);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialEvent]);
 
   const handleChange = (e) => {

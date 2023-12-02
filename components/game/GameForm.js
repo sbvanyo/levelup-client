@@ -31,6 +31,7 @@ const GameForm = ({ initialGame, user }) => {
       };
       setCurrentGame(formattedGame);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialGame]);
 
   const handleChange = (e) => {
