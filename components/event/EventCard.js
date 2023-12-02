@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
+import { deleteEvent } from '../../utils/data/eventData';
 
 const EventCard = ({
   id,
@@ -10,8 +11,15 @@ const EventCard = ({
   time,
   game,
   user,
+  onUpdate,
 }) => {
   const router = useRouter();
+
+  const deleteThisEvent = () => {
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      deleteEvent(id).then(() => onUpdate());
+    }
+  };
 
   return (
     <Card className="text-center">
@@ -27,6 +35,11 @@ const EventCard = ({
         >
           Update
         </Button>
+        <Button
+          onClick={deleteThisEvent}
+        >
+          Delete
+        </Button>
       </Card.Body>
       <Card.Footer className="text-muted">Organizer Details: {user}</Card.Footer>
     </Card>
@@ -40,6 +53,7 @@ EventCard.propTypes = {
   time: PropTypes.string.isRequired,
   game: PropTypes.string.isRequired,
   user: PropTypes.string.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 EventCard.defaultProps = {
