@@ -6,7 +6,9 @@ const NewGame = () => {
   return (
     <div>
       <h2>Register New Game</h2>
-      <GameForm user={user} />
+      <GameForm
+        user={user}
+      />
     </div>
   );
 };
