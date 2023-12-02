@@ -74,6 +74,24 @@ const getGameTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const deleteGame = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/games/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (response.ok && response.status !== 204) {
+        return response.json();
+      } if (response.ok) {
+        return null;
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
+    })
+    .then((data) => resolve((data)))
+    .catch(reject);
+});
 // eslint-disable-next-line import/prefer-default-export
 export {
   getGames,
@@ -81,4 +99,5 @@ export {
   createGame,
   updateGame,
   getGameTypes,
+  deleteGame,
 };

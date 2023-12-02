@@ -13,6 +13,10 @@ function Home() {
 
   const router = useRouter();
 
+  const updateCards = () => {
+    getEvents().then((data) => setEvents(data));
+  };
+
   return (
     <>
       <Button
@@ -27,7 +31,7 @@ function Home() {
         <h1>Events</h1>
         {events.map((event) => (
           <section key={`event--${event.id}`} className="event">
-            <EventCard description={event.description} date={event.date} time={event.time} user={event.organizer.bio} id={event.id} game={event.game.title} />
+            <EventCard description={event.description} date={event.date} time={event.time} user={event.organizer.bio} id={event.id} game={event.game.title} onUpdate={updateCards} />
           </section>
         ))}
       </article>
