@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import { clientCredentials } from '../client';
 
 function toCamelCase(obj) {
@@ -9,10 +10,16 @@ function toCamelCase(obj) {
   return newObj;
 }
 
-const getEvents = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/events`)
+const getEvents = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${uid}`,
+    },
+  })
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
@@ -81,6 +88,42 @@ const deleteEvent = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const leaveEvent = (event, uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${event}/leave`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${uid}`,
+    },
+  })
+    .then((data) => {
+      if (data) {
+        resolve(data);
+      } else {
+        resolve([]);
+      }
+    })
+    .catch(reject);
+});
+
+const joinEvent = (event, uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${event}/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${uid}`,
+    },
+  })
+    .then((data) => {
+      if (data) {
+        resolve(data);
+      } else {
+        resolve([]);
+      }
+    })
+    .catch(reject);
+});
+
 // eslint-disable-next-line import/prefer-default-export
 export {
   getEvents,
@@ -88,4 +131,6 @@ export {
   updateEvent,
   getSingleEvent,
   deleteEvent,
+  leaveEvent,
+  joinEvent,
 };
